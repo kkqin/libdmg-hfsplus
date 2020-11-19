@@ -276,6 +276,12 @@ static unsigned char* getXMLData(char** location, size_t *dataLength) {
   return toReturn;
 }
 
+static void trim_space(char** location) {
+	char* curLoc = *location; 
+	for(;strncmp(curLoc, "<", 1); curLoc++);
+	*location = curLoc;
+}
+
 static void readResourceData(ResourceData* data, char** location, FlipDataFunc flipData) {
   char* curLoc;
   char* tagBegin;
@@ -321,6 +327,8 @@ static void readResourceData(ResourceData* data, char** location, FlipDataFunc f
     } else if(strncmp(tagBegin, "Name", strLen) == 0) {
       data->name = getXMLString(&curLoc);
     }
+
+    trim_space(&curLoc);
   }
   
   curLoc = dictEnd + sizeof("</dict>") - 1;
