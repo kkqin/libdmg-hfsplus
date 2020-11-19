@@ -608,8 +608,8 @@ ResourceKey* readResources(AbstractFile* file, UDIFResourceFile* resourceFile) {
       curResource->flipData = &flipCSumResource;
     }
     
-    curLoc = strstr(curLoc, "<dict>");
-    while(curLoc != NULL && curLoc < tagEnd) {
+    while(curLoc < tagEnd) {
+      curLoc = strstr(curLoc, "<dict>");
       if(curResource->data == NULL) {
         curResource->data = (ResourceData*) malloc(sizeof(ResourceData));
         curData = curResource->data;
@@ -621,7 +621,7 @@ ResourceKey* readResources(AbstractFile* file, UDIFResourceFile* resourceFile) {
       curData->next = NULL;
       
       readResourceData(curData, &curLoc, curResource->flipData);
-      curLoc = strstr(curLoc, "<dict>");
+      trim_space(&curLoc);
     }
        
     curLoc = tagEnd + sizeof("</array>") - 1;
